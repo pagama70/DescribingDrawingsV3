@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Describing Drawings</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1c2430;--mut:#5d6b7c;--line:#d5dbe3;--acc:#2563eb;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--grid:#e3e8ef;--draw:#111;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12161c;--card:#1b222b;--ink:#e8edf3;--mut:#9aa7b7;--line:#334050;--acc:#6ea2ff;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--grid:#2a3441;--draw:#f2f2f2}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#12161c;--card:#1b222b;--ink:#e8edf3;--mut:#9aa7b7;--line:#334050;--acc:#6ea2ff;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--grid:#2a3441;--draw:#f2f2f2}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:14px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:12px}
+h1{font-size:20px;margin:0}h2{font-size:14px;margin:0 0 6px}
+.sub{color:var(--mut);margin:2px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;font:inherit}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff} .chip.wu:not(.on){background:color-mix(in srgb,var(--ink) 14%,var(--card))}
+textarea{width:100%;min-height:120px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+button.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer}
+button.btn.sec{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:400}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.work{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}.work.h3{grid-template-columns:1fr 1fr 1fr}.work>.card.rel{position:relative}.work .in{position:absolute;inset:12px;overflow:auto}
+.selrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}.selrow .chips{display:contents}.selrow .btn{padding:4px 12px;border-radius:999px;margin-left:6px;font-size:14px}
+@media (max-width:900px){.work,.work.h3{grid-template-columns:1fr}.work .in{position:static}}
+#hp .btn{padding:5px 12px}
+svg.cv{width:100%;height:auto;display:block;background:var(--bg);border-radius:8px}
+.gl{stroke:var(--grid);stroke-width:.25}.ax{stroke:var(--mut);stroke-width:.6}
+.tx{fill:var(--mut);font-size:3px}.lb{fill:var(--acc);font-size:4px;font-weight:600}
+.score{margin-top:8px;font-size:13px;color:var(--mut)}
+.bar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .4s}
+.fb{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
+li{padding:6px 8px;border-left:3px solid var(--mut);background:var(--bg);border-radius:4px}
+li.ok{border-color:var(--ok)}li.tip{border-color:var(--acc)}li.warn{border-color:var(--warn)}
+li .ic{display:inline-block;min-width:1.25em;font-weight:700}li.red .ic{color:#dc2626}li.yel .ic{color:#a16207}li.ok .ic{color:var(--ok)}
+li.red{border-color:#dc2626;background:color-mix(in srgb,#dc2626 10%,var(--card))}
+li.yel{border-color:#eab308;background:color-mix(in srgb,#eab308 16%,var(--card))}
+.why{background:none;border:1px solid var(--line);border-radius:999px;padding:1px 9px;font:inherit;font-size:12px;color:var(--acc);cursor:pointer;margin-left:8px}.why:hover{border-color:var(--acc)}
+.card.pr{position:relative}.pop{position:absolute;left:10px;right:10px;bottom:10px;max-height:78%;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.28);padding:12px;z-index:20;font-size:13px;line-height:1.45}.pop[hidden]{display:none}.pop h3{margin:0 0 8px;font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.voc{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.voc span{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.voc span.u{background:var(--ok);border-color:var(--ok);color:#fff}
+.voc span{position:relative;cursor:help}
+.voc span:hover::after,.voc span:focus::after{content:attr(data-tip);position:absolute;bottom:130%;left:50%;transform:translateX(calc(-50% + var(--sh,0px)));z-index:9;width:max-content;max-width:220px;white-space:normal;background:var(--ink);color:var(--card);padding:6px 10px;border-radius:6px;font-size:12px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.3);pointer-events:none}
+@media(max-width:800px){.panels,.fb{grid-template-columns:1fr}}
+</style></head><body>
+<div class="wrap">
+<div class="card">
+<h1>📐 Describing Drawings</h1>
+<p class="sub">Look at the original drawing. Describe it in English, then press <b>Draw</b>. The right panel draws only what your text says.</p>
+<div class="selrow"><div class="chips" id="sel"></div><button class="btn sec" id="tv">👩‍🏫 Teacher view</button></div>
+</div>
+
+<div class="work">
+<div class="card">
+<h2>✍️ Your description <span id="dn" style="color:var(--mut);font-weight:400"></span></h2>
+<textarea id="txt" placeholder='e.g. "There is a circle. Its centre is at (50,50) and its radius is 20 mm."'></textarea>
+<div class="row"><button class="btn" id="go">Draw from my text</button><button class="btn sec" id="clr">Clear</button><span class="sub" style="font-size:12px">Tip: Ctrl+Enter also draws.</span></div>
+</div>
+<div class="card rel" id="rcc"><div class="in"><h2>🔍 Reading check</h2><p class="sub" style="font-size:13px;margin:0 0 8px"><b style="color:#dc2626">✖︎ Red</b>: needed to draw the element. <b style="color:#a16207">⚠︎ Yellow</b>: improves the match. <b style="color:#16a34a">✔︎ Green</b>: all read.</p><ul id="un"><li>Press “Draw from my text”.</li></ul></div></div>
+<div class="card rel" id="hp" hidden><div class="in"><h2>🧩 Need help?</h2><div class="row"><button class="btn sec" id="hw">Word bank</button><button class="btn sec" id="hf">Sentence frame</button></div><div id="hb" style="margin-top:8px;font-size:13px;line-height:1.4"></div></div></div>
+</div>
+
+<div class="panels">
+<div class="card"><h2>Original drawing <span style="color:var(--mut);font-weight:400">(grid in mm, 0–100)</span></h2><svg class="cv" id="L" viewBox="0 0 118 116"></svg></div>
+<div class="card pr"><h2>Your drawing (from your text)</h2><div id="pop" class="pop" role="dialog" hidden></div><svg class="cv" id="R" viewBox="0 0 118 116"></svg>
+<div class="score" id="sc">Press “Draw from my text” to see your drawing.<button class="why" id="wm" hidden aria-expanded="false">ⓘ Why?</button><div class="bar"><i id="br"></i></div></div><div class="score" id="ls" style="margin-top:8px"><span id="lt"></span><button class="why" id="wl" hidden aria-expanded="false">ⓘ Why?</button><div class="bar"><i id="lb" style="background:var(--acc)"></i></div></div></div>
+</div>
+
+<div class="card" id="tp" hidden><h2>👩‍🏫 Teacher view: model descriptions</h2><p class="sub" style="font-size:13px">A model text for every drawing. “Try” loads it into the text box and draws it, so you can check the match.</p><div class="row"><button class="btn sec" id="ca">Copy all</button></div><ul id="tl" style="margin-top:8px"></ul></div>
+<div class="fb">
+<div class="card"><h2>🗣️ English: grammar &amp; style</h2><ul id="fg"></ul></div>
+<div class="card"><h2>🎯 Precision of instructions</h2><ul id="fp"></ul></div>
+<div class="card"><h2>🔧 Technical vocabulary</h2><ul id="fv"></ul><div class="voc" id="vc"></div></div>
+</div>
+</div>
+<svg id="hid" style="position:absolute;width:0;height:0;visibility:hidden"></svg>
+
+<script>
+const NS='http://www.w3.org/2000/svg',$=i=>document.getElementById(i);
+const A=(r,x,y)=>r?`A${r} ${r} 0 0 0 ${x} ${y}`:'';
+const L=(a,b,c,d)=>`M${a} ${b}L${c} ${d}`;
+const R=(x,y,w,h,c={})=>{const{tl=0,tr=0,br=0,bl=0}=c;return `M${x} ${y+bl}L${x} ${y+h-tl}${A(tl,x+tl,y+h)}L${x+w-tr} ${y+h}${A(tr,x+w,y+h-tr)}L${x+w} ${y+br}${A(br,x+w-br,y)}L${x+bl} ${y}${A(bl,x,y+bl)}Z`};
+const C=(x,y,r)=>`M${x-r} ${y}A${r} ${r} 0 1 0 ${x+r} ${y}A${r} ${r} 0 1 0 ${x-r} ${y}`;
+const S=(d,o={})=>({d,...o}),T=(x,y,t)=>({txt:[x,y,t]}),K=2.2,c45=Math.SQRT1_2,PT=(x,y)=>S(`M${x} ${y}L${x+.01} ${y}`,{k:'point',lw:3.4});
+const D=[
+{w:1,n:'A',s:[PT(30,40)],k:[['point','Name the element: a point.'],['\\d','Give the coordinates (x, y) of the point.']],wb:[['point','a very small mark that shows a position'],['at','shows the position, for example: at (30,40)'],['coordinates (x, y)','two numbers: x = across, y = up']],fr:'There is a point at (__, __).'},
+{w:1,n:'B',s:[PT(20,20),PT(70,60)],k:[['two|2','Say how many points there are.'],['point','Name the elements: points.'],['\\d','Give the coordinates (x, y) of every point.']],wb:[['point / points','one mark / several marks that show positions'],['two','the number 2'],['and','joins the two positions'],['coordinates (x, y)','two numbers: x = across, y = up']],fr:'There are two points at (__, __) and (__, __).'},
+{w:1,n:'C',s:[PT(20,70),PT(50,30),PT(80,70)],k:[['three|3','Say how many points there are.'],['point','Name the elements: points.'],['\\d','Give the coordinates (x, y) of every point.']],wb:[['point / points','one mark / several marks that show positions'],['three','the number 3'],['and','joins the last two positions'],['coordinates (x, y)','two numbers: x = across, y = up']],fr:'There are three points at (__, __), (__, __) and (__, __).'},
+{w:1,n:'D',s:[S(L(20,30,70,30))],k:[['horizontal','Say the direction: horizontal or vertical.'],['long|length','Say how long the line is.'],['start|begin|from','Say where the line starts.']],wb:[['line','a straight mark between two points'],['horizontal','flat, from left to right ↔'],['long','"50 mm long" = the length of the line'],['starting at','where the line begins'],['coordinates (x, y)','two numbers: x = across →, y = up ↑']],fr:'There is a ______ line ____ mm long, starting at (__, __).'},
+{w:1,n:'E',s:[S(L(50,20,50,60))],k:[['vertical','Say the direction: horizontal or vertical.'],['long|length','Say how long the line is.'],['start|begin|from','Say where the line starts.']],wb:[['line','a straight mark between two points'],['vertical','straight, up and down ↕'],['long','"40 mm long" = the length of the line'],['starting at','where the line begins'],['coordinates (x, y)','two numbers: x = across →, y = up ↑']],fr:'There is a ______ line ____ mm long, starting at (__, __).'},
+{w:1,n:'F',s:[S(R(30,30,40,40))],k:[['square','Name the shape: a square.'],['side','Say how long the sides are.'],['corner','Say where one corner is.']],wb:[['square','a shape with four equal sides'],['side','one edge of the shape'],['corner','the point where two sides meet'],['bottom left','the lower left corner'],['coordinates (x, y)','two numbers: x = across →, y = up ↑']],fr:'There is a square with sides of ____ mm. Its bottom left corner is at (__, __).'},
+{w:1,n:'G',s:[S(R(20,35,60,30))],k:[['rectang','Name the shape: a rectangle.'],['wide|width','Say how wide it is.'],['high|height','Say how high it is.'],['corner','Say where one corner is.']],wb:[['rectangle','a shape with four sides: two long, two short'],['wide / width','the measure from left to right'],['high / height','the measure from bottom to top'],['corner','the point where two sides meet'],['coordinates (x, y)','two numbers: x = across →, y = up ↑']],fr:'There is a rectangle ____ mm wide and ____ mm high, with its bottom left corner at (__, __).'},
+{w:1,n:'H',s:[S(C(50,50,20))],k:[['circle','Name the shape: a circle.'],['centre|center','Say where the centre is.'],['radius|diameter','Give the radius or the diameter.']],wb:[['circle','a round shape'],['centre','the middle point of the circle'],['radius','the distance from the centre to the edge'],['diameter','the distance across the circle (2 × radius)'],['coordinates (x, y)','two numbers: x = across →, y = up ↑']],fr:'There is a circle with its centre at (__, __) and a radius of ____ mm.'},
+{n:'1',s:[S(L(30,35,70,35)),S(L(30,50,70,50)),S(L(30,65,70,65))],k:[['three|3','Say how many lines there are.'],['horizontal','Say the direction: horizontal or vertical.'],['parallel','Use "parallel" for lines that never meet.']]},
+{n:'2',s:[S(L(50,15,50,85)),S(L(35,40,65,40)),S(L(35,60,65,60))],k:[['vertical','One line is vertical.'],['two|2','Count the horizontal lines.'],['horizontal','The other lines are horizontal.'],['cross|intersect|perpendicular|through','How do the lines meet? Use cross / intersect / perpendicular.']]},
+{n:'3',s:[S(L(30,65,70,65)),S(L(30,50,70,50),{dash:'dash'}),S(L(30,35,70,35),{dash:'dashdot'})],k:[['continuous|solid','Name the first line type: continuous (solid).'],['dashed','Name the second line type: dashed.'],['dash-dot|dash dot|dash and dot|centre|center','Name the third line type: dash-dot (centre line).']]},
+{n:'4',s:[S(L(30,30,80,30)),S(L(30,30,65.36,65.36)),S(`M45 30A15 15 0 0 1 ${30+15*c45} ${30+15*c45}`),T(48,36,'45°')],num:1,k:[['horizontal','Describe the base line (horizontal).'],['45','Give the angle.'],['degree|°|º','Write "degrees" after the angle.'],['left|start|end|corner|origin|vertex|from','Say where the two lines meet.']]},
+{n:'5',s:[S(R(10,10,40,30)),T(10,6,'10,10'),T(50,43,'50,40')],num:1,k:[['rectang','Name the shape.'],['10','Give the coordinates of the bottom-left corner.'],['50','Give the coordinates of the top-right corner.'],['corner','Use "corner" for the points of a rectangle.']]},
+{n:'6',s:[S(C(50,50,20)),T(46,52,'50,50'),T(60,60,'R20')],num:1,k:[['circle','Name the shape.'],['centre|center','Say where the centre is.'],['radius|diameter','Give the radius or the diameter.']]},
+{n:'7',s:[S(L(20,30,70,30),{lw:K}),T(20,34,'20,30'),T(43,26,'50')],num:1,k:[['thick|bold|heavy','The line is thick.'],['horizontal','Say the direction.'],['50','Give the length.'],['20','Give the coordinates of the starting point.']]},
+{n:'8',s:[S(R(20,30,40,20),{lw:K}),T(36,26,'40'),T(63,41,'20')],num:1,k:[['thick|bold','The outline is thick.'],['40','Give the width.'],['20','Give the height.'],['wide|width','Use "wide/width" for horizontal size and "high/height" for vertical size.']]},
+{n:'9',s:[S('M35 20L35 55A15 15 0 0 0 65 55L65 20Z')],k:[['semi|arch|half','Name the curved part: a semicircle.'],['rectang','Name the lower part.'],['top|above|on','Say where the semicircle is.'],['wide|width|high|height','Give measurements.']]},
+{n:'10',s:[S(R(25,25,50,50,{tr:20}))],k:[['square','Name the main shape.'],['round|curv','One corner is rounded.'],['top[- ]?right|upper right','Say which corner is rounded.'],['radius','Use "radius" for the size of the curve.']]},
+{n:'11',s:[S(C(50,50,25)),S(L(25,50,75,50)),S(L(50,25,50,75))],k:[['circle','Name the shape.'],['four|quarter|cross|perpendicular|diameter','The circle is divided into parts: how many?'],['centre|center','Use "centre" for the middle point.'],['horizontal','Name the direction of the lines.']]},
+{n:'12',s:[S(C(50,50,35.36)),S(R(25,25,50,50))],k:[['circle','Name the outer shape.'],['square','Name the inner shape.'],['inside|inscribed|within','Say which shape is inside the other.'],['corner|touch|vertex|vertices','Say how the square touches the circle.']]},
+{n:'13',s:[S(C(50,50,15)),S(C(50,50,30))],num:1,k:[['concentric','Use "concentric" for circles with the same centre.'],['two|2','Say how many circles there are.'],['radius|radii|diameter','Give the radii or diameters.'],['centre|center','Say where the common centre is.']]},
+{n:'14',s:[S('M20 20L80 20L50 70Z')],num:1,k:[['triangle','Name the shape.'],['vertex|vertices|corner','Use "vertices" for the corners of a triangle.'],['coordinates|\\(','Give the coordinates of each vertex.']]},
+{n:'15',s:[S(R(20,30,60,40)),S(L(20,30,80,70))],k:[['rectang','Name the main shape.'],['diagonal','Name the direction of the line: diagonal.'],['corner','Say which corners the line joins.'],['60|40','Give the width and the height.']]},
+{n:'16',s:[S(C(35,50,15)),S(C(65,50,15))],k:[['two|2','Say how many circles there are.'],['touch|tangent','How do the circles meet? Use "touch" or "tangent".'],['radius|diameter','Give the radius or the diameter.'],['equal|same|both','Say that both circles are equal.']]},
+{n:'17',s:[S(R(20,30,60,40)),S(C(50,50,15))],k:[['rectang','Name the outer shape.'],['circle','Name the inner shape.'],['centre|center|middle','Say where the circle is.'],['radius|diameter','Give the radius or diameter.']]},
+{n:'18',s:[S(L(20,30,80,30)),S(L(20,50,80,50))],k:[['parallel','Relate the lines: "parallel to".'],['above|below','Say where the second line is: above or below the first one.'],['\\d','Give the measures in mm.']]},
+{n:'19',s:[S(C(30,50,15)),S(R(55,40,20,20))],k:[['circle','Describe the circle.'],['square','Describe the square.'],['right of|left of','Use "to the right of" or "to the left of" and give the distance.']]},
+{n:'20',s:[S(R(25,15,50,20)),S(C(50,55,10))],k:[['rectang','Describe the rectangle.'],['circle','Describe the circle.'],['above|below','Use "above" or "below" and give the distance.']]},
+{n:'21',s:[S(R(10,40,20,20)),S(C(50,50,10)),S(L(30,30,70,30))],k:[['square','Describe the square.'],['circle','Describe the circle.'],['line','Describe the line.'],['right of|left of','Place one element to the right or left of another.'],['below|above','Place one element above or below another.']]},
+];
+const MODEL=[`There is a point at (30,40).`,`There are two points at (20,20) and (70,60).`,`There are three points at (20,70), (50,30) and (80,70).`,`There is a horizontal line 50 mm long, starting at (20,30).`,`There is a vertical line 40 mm long, starting at (50,20).`,`There is a square with sides of 40 mm. Its bottom left corner is at (30,30).`,`There is a rectangle 60 mm wide and 30 mm high, with its bottom left corner at (20,35).`,`There is a circle with its centre at (50,50) and a radius of 20 mm.`,`There are three horizontal parallel lines, each 40 mm long, starting at (30,35), (30,50) and (30,65).`,`There is a vertical line from (50,15) to (50,85). There are two horizontal lines that cross it, from (35,40) to (65,40) and from (35,60) to (65,60).`,`There are three horizontal lines, each 40 mm long, starting at (30,65), (30,50) and (30,35). The first is continuous, the second is dashed and the third is dash-dot.`,`There is a horizontal line 50 mm long starting at (30,30). Another line starts at the left end and makes an angle of 45 degrees.`,`There is a rectangle with its bottom left corner at (10,10) and its top right corner at (50,40).`,`There is a circle with its centre at (50,50) and a radius of 20 mm.`,`There is a thick horizontal line 50 mm long, starting at (20,30).`,`There is a thick rectangle 40 mm wide and 20 mm high, with its bottom left corner at (20,30).`,`There is a rectangle 30 mm wide and 35 mm high, with its bottom left corner at (35,20), and a semicircle on top.`,`There is a square with sides of 50 mm and its bottom left corner at (25,25). Its top right corner is rounded with a radius of 20 mm.`,`There is a circle with its centre at (50,50) and a radius of 25 mm. It is divided into four equal parts by a horizontal and a vertical line.`,`There is a square with sides of 50 mm inside a circle.`,`There are two concentric circles with their centre at (50,50) and radii of 15 mm and 30 mm.`,`There is a triangle with vertices at (20,20), (80,20) and (50,70).`,`There is a rectangle 60 mm wide and 40 mm high, with its bottom left corner at (20,30). A diagonal line goes from the bottom left corner to the top right corner.`,`There are two circles with a radius of 15 mm and their centres at (35,50) and (65,50). They touch each other.`,`There is a rectangle 60 mm wide and 40 mm high with a circle of radius 15 mm in the centre.`,
+`There is a horizontal line 60 mm long, starting at (20,30). Another line, parallel to it, is 20 mm above it and 60 mm long.`,`There is a circle with its centre at (30,50) and a radius of 15 mm. There is a square with sides of 20 mm, 10 mm to the right of the circle.`,`There is a rectangle 50 mm wide and 20 mm high, with its bottom left corner at (25,15). There is a circle with a radius of 10 mm, 10 mm above the rectangle.`,`There is a square with sides of 20 mm and its bottom left corner at (10,40). There is a circle with a radius of 10 mm, 10 mm to the right of the square. There is a horizontal line 40 mm long, 10 mm below the circle.`];
+const VOC=[['point'],['line'],['above'],['below'],['left of'],['right of'],['horizontal'],['vertical'],['parallel'],['perpendicular'],['diagonal'],['radius'],['diameter'],['centre','cent(re|er)'],['coordinates'],['thick'],['dashed'],['rectangle'],['square'],['circle'],['semicircle','semi-?circle|half[- ]circle'],['arc'],['angle'],['degrees'],['corner'],['inside'],['width','wid(th|e)'],['height','height|high'],['length','length|long'],['mm','\\bmm\\b|millimet'],['triangle'],['concentric'],['tangent','tangent|touch'],['vertex','vert(ex|ices)'],['base'],['equal'],['opposite']];
+
+function render(svg,shapes){
+ let g='';
+ for(let i=0;i<=100;i+=10){const x=12+i,y=106-i;
+  g+=`<line class="${i?'gl':'ax'}" x1="${x}" y1="6" x2="${x}" y2="106"/><line class="${i?'gl':'ax'}" x1="12" y1="${y}" x2="112" y2="${y}"/><text class="tx" x="${x}" y="110" text-anchor="middle">${i}</text><text class="tx" x="10" y="${y+1}" text-anchor="end">${i}</text>`}
+ g+=`<text class="lb" x="114" y="108">X</text><text class="lb" x="7" y="5">Y</text>`;
+ let p='',t='';
+ shapes.forEach(s=>{const as=s.as&&s.as.length;if(s.d)p+=`<path d="${s.d}" fill="none" stroke="${as?'var(--mut)':'var(--draw)'}" stroke-width="${as&&s.k!='point'?.5:s.lw||.9}" stroke-linejoin="round" ${s.k=='point'?'stroke-linecap="round"':''} ${as?'stroke-dasharray="1 1.5"':s.dash?`stroke-dasharray="${s.dash=='dash'?'4 2.5':'6 2 1 2'}"`:''}/>`;
+  if(s.txt)t+=`<text x="${12+s.txt[0]}" y="${106-s.txt[1]}" font-size="4" fill="var(--draw)">${s.txt[2]}</text>`});
+ svg.innerHTML=g+`<g transform="translate(12 106) scale(1 -1)">${p}</g>`+t;
+}
+
+const CO=/\(?\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*\)?/g;
+const NUMW={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6};
+const TENS={ten:10,eleven:11,twelve:12,fifteen:15,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90,hundred:100},U={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9};
+const SYN=[[/\b(rectangular|oblong|box)\b/g,'rectangle'],[/\bhorizontally\b/g,'horizontal'],[/\b(vertically|upright)\b/g,'vertical'],[/\bdiagonally\b/g,'diagonal'],[/\b(circular|rings?|discs?|disks?)\b/g,m=>/s$/.test(m)?'circles':'circle'],[/\bbroken lines?\b/g,'dashed line'],[/\b(dash[- ]and[- ]dot|dot[- ]dash|dash[- ]dotted)\b/g,'dash-dot'],[/\bstraight\b/g,''],[/\bmillimet(?:re|er)s?\b/g,'mm'],[/\bcent(?:red|ered)\b/g,'center'],[/\bhalf-?way\b/g,'middle'],[/\b(segments?|strokes?)\b/g,'line'],[/\bin (width|height|length|diameter|radius)\b/g,'$1'],[/\b(thickly|extra thick)\b/g,'thick'],[/\bperpendicularly\b/g,'perpendicular'],[/\b(?:one|a) hundred\b/g,'100'],[/\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)[- ](one|two|three|four|five|six|seven|eight|nine)\b/g,(m,a,b)=>TENS[a]+U[b]],[/\b(ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred)\b/g,m=>TENS[m]]];
+const norm=s=>SYN.reduce((t,[r,v])=>t.replace(r,v),s).replace(/\s+/g,' ').trim();
+function parse(raw,strict){
+ const out=[];let LR=null,LC=null,LV=null,LH=null;const ign=[],sig=()=>JSON.stringify(out.map(o=>[o.x,o.y,o.w,o.h,o.r,o.rc,o.arch,o.cr,o.x1,o.x2,o.y1,o.y2,o.dash,o.lw]));let last=sig();let grp=[],LG=[],hit=false;
+ const drop=(o,t)=>{if(o.as)o.as=o.as.map(x=>x.replace(t=='size'?/(width and height|length|radius|radii|size)( and )?/:/( and )?(position( \(coordinates\))?|centres?|vertex coordinates)/,'').trim()).filter(Boolean)};
+ const RX=/,?\s+and\s+(?=(?:a|an|another)\s+(?:[a-z-]+\s+)?(?:circle|rectangle|square|triangle|semi-?circle|half[- ]circle)\b)|(?:,\s*(?:and\s+)?|\s+and\s+)(?=the\s+(?:first|second|third|fourth)\b)/;
+ const sents0=raw.toLowerCase().replace(/(\d)\.(\d)/g,'$1§$2').split(/[.;!?\n]+/).map(x=>x.replace(/§/g,'.').trim()).filter(Boolean),sents=sents0.flatMap(x=>x.split(RX)).map(x=>x.trim()).filter(Boolean);
+ let RLI=null;const bb=o=>o.k=='rect'?[o.x,o.y,o.x+o.w,o.y+o.h]:o.k=='circle'?[o.x-o.r,o.y-o.r,o.x+o.r,o.y+o.r]:o.k=='line'?[Math.min(o.x1,o.x2),Math.min(o.y1,o.y2),Math.max(o.x1,o.x2),Math.max(o.y1,o.y2)]:[o.x,o.y,o.x,o.y],shift=(o,dx,dy)=>{if(o.k=='line'){o.x1+=dx;o.x2+=dx;o.y1+=dy;o.y2+=dy}else{o.x+=dx;o.y+=dy}};
+ let si_=-1;const chk=i=>{if(i<0)return;const g=sig();if(g===last&&!hit)ign.push(sents[i][0].toUpperCase()+sents[i].slice(1)+'.');last=g;hit=false};
+ for(let s of sents){chk(si_);if(grp.length)LG=grp;grp=[];si_++;s=norm(s);RLI=null;{const m=s.match(/(?:(?<!\bof\s)(?<![\d.])(\d+(?:\.\d+)?)\s*(?:mm|cm)?\s*)?(?:directly\s+)?(above|below|to the left of|to the right of|left of|right of)\s+(it|the\s+(?:circle|square|rectangle|line|point))/);
+  if(m){RLI={g:m[1]?+m[1]:null,d:m[2].replace('to the ','').replace(' of',''),k:(m[3].split(/\s+/)[1]||'').replace(/^(square|rectangle)$/,'rect'),par:/parallel to (it|the line)/.test(s)};s=s.replace(m[0],' ').replace(/parallel to (it|the line)/,' ')}}
+  const co=[...s.matchAll(CO)].map(m=>[+m[1],+m[2]]),C0=co[0];
+  s=s.replace(CO,' COORD ').replace(/semi-?circle|half[- ]circle|\barch\b/g,' SEMI ');
+  const nm=w=>{const a=s.match(new RegExp('(\\d+(?:\\.\\d+)?)\\s*(?:mm|cm|units?)?\\s*(?:of\\s+)?(?:'+w+')\\b'))||s.match(new RegExp('\\b(?:'+w+')\\s*(?:of|is|=|:|equals|measures)?\\s*(\\d+(?:\\.\\d+)?)'));return a?+a[1]:null};
+  const lw=/thick|bold|heavy/.test(s)?K:.9;
+  const sty=[...s.matchAll(/dash[- ]?dot(?:ted)?|cent(?:re|er) line|dash(?:ed)?|dotted|continuous|solid/g)].map(m=>/dash[- ]?dot|cent/.test(m[0])?'dashdot':/dash|dot/.test(m[0])?'dash':'');
+  const mk=o=>{o={lw,dash:sty[0]||'',pg:!!C0,src:sents[si_],...o};
+   if(RLI&&!RLI.done&&/^(rect|circle|line|point)$/.test(o.k)){RLI.done=1;const pl=out.filter(x=>/^(rect|circle|line|point)$/.test(x.k)&&(!RLI.k||x.k==RLI.k)),r=pl[pl.length-1];
+    if(r){const b=bb(r),n=bb(o),g=RLI.g||0,cx=(b[0]+b[2])/2-(n[0]+n[2])/2,cy=(b[1]+b[3])/2-(n[1]+n[3])/2;let dx=cx,dy=cy;
+     if(RLI.d=='right'){dx=b[2]+g-n[0]}else if(RLI.d=='left'){dx=b[0]-g-n[2]}else if(RLI.d=='above'){dy=b[3]+g-n[1]}else{dy=b[1]-g-n[3]}
+     shift(o,dx,dy);o.pg=true;drop(o,'pos');if(strict&&RLI.g==null){o.as=[...(o.as||[]),'distance']}}}
+   out.push(o);grp.push(o);return o};
+  const hasC=/\bcircles?\b/.test(s),hasS=/\bsquares?\b/.test(s),hasR=/rectang/.test(s),semi=/SEMI/.test(s);
+  const inRe=/inside|within|inscri|\bin\b/,diam=nm('diameter'),rad=nm('radius'),RAD=rad||(diam?diam/2:null);
+  const OBJ=out.filter(o=>/^(rect|circle|line|path)$/.test(o.k)),pm=/^(it|its|they|their|this|these|each|both)\b/.test(s),dm=s.match(/^the\s+(?:(first|second|third|fourth)\s+)?(?:[a-z-]+\s+)?(circles?|rectangles?|squares?|lines?|triangles?)\b/)||s.match(/^the\s+(first|second|third|fourth)\b()/);
+  if(pm||dm){
+   const kd={circle:'circle',rectangle:'rect',square:'rect',line:'line',triangle:'path'},nn=dm&&dm[2]?kd[dm[2].replace(/s$/,'')]:null,pl2=dm&&dm[2]&&/s$/.test(dm[2]);
+   const pool=nn?OBJ.filter(o=>o.k==nn):(LG.length>1?LG:OBJ),lg=nn?LG.filter(o=>o.k==nn):LG;let TG=[];
+   if(dm&&dm[1])TG=[pool[{first:0,second:1,third:2,fourth:3}[dm[1]]]].filter(Boolean);
+   else if(pl2||/^(they|their|these|both|each)\b/.test(s))TG=lg.length?lg:pool;
+   else if(pool.length)TG=[pool[pool.length-1]];
+   let ch=false;
+   TG.forEach((o,i)=>{
+    const w=nm('wide|width'),hh=nm('high|tall|height'),sd=nm('sides?|side length'),ln0=nm('long|length');
+    if(o.k=='rect'){
+     const W=w||sd,H=hh||sd;
+     if(W||H){if(W){o.w=W;o.kw=1}if(H){o.h=H;o.kh=1}if((o.kw&&o.kh)||(W&&H))drop(o,'size');ch=true;if(!o.pg){o.x=50-o.w/2;o.y=50-o.h/2}}
+     if(co.length>=2){o.x=Math.min(co[0][0],co[1][0]);o.y=Math.min(co[0][1],co[1][1]);o.w=Math.abs(co[0][0]-co[1][0]);o.h=Math.abs(co[0][1]-co[1][1]);o.pg=1;drop(o,'size');drop(o,'pos');ch=true}
+     else if(C0){const[a,b]=C0;if(/cent(re|er)|middle/.test(s)){o.x=a-o.w/2;o.y=b-o.h/2}else if(/top[- ]?left|upper left/.test(s)){o.x=a;o.y=b-o.h}else if(/top[- ]?right|upper right/.test(s)){o.x=a-o.w;o.y=b-o.h}else if(/bottom[- ]?right|lower right/.test(s)){o.x=a-o.w;o.y=b}else{o.x=a;o.y=b}o.pg=1;drop(o,'pos');ch=true}
+    }else if(o.k=='circle'){
+     if(RAD){o.r=RAD;drop(o,'size');ch=true}
+     if(C0){o.x=C0[0];o.y=C0[1];o.pg=1;drop(o,'pos');ch=true}
+    }else if(o.k=='point'){
+     if(C0){o.x=C0[0];o.y=C0[1];o.pg=1;drop(o,'pos');ch=true}
+    }else if(o.k=='line'){
+     if(co.length>=2){Object.assign(o,{x1:co[0][0],y1:co[0][1],x2:co[1][0],y2:co[1][1],pg:1});drop(o,'size');drop(o,'pos');ch=true}
+     else{
+      if(ln0){const dx=o.x2-o.x1,dy=o.y2-o.y1,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
+       if(o.pg){o.x2=o.x1+ux*ln0;o.y2=o.y1+uy*ln0}else{const cx=(o.x1+o.x2)/2,cy=(o.y1+o.y2)/2;o.x1=cx-ux*ln0/2;o.y1=cy-uy*ln0/2;o.x2=cx+ux*ln0/2;o.y2=cy+uy*ln0/2}
+       drop(o,'size');ch=true}
+      if(C0){const e=/\bend(s|ing)?\s+(at\s+)?COORD/.test(s),tx=C0[0]-(e?o.x2:o.x1),ty=C0[1]-(e?o.y2:o.y1);o.x1+=tx;o.x2+=tx;o.y1+=ty;o.y2+=ty;o.pg=1;drop(o,'pos');ch=true}
+     }
+    }
+    if(sty.length){o.dash=sty[Math.min(i,sty.length-1)];ch=true}
+    if(/thick|bold|heavy/.test(s)){o.lw=K;ch=true}
+   });
+   if(ch){hit=true;continue}
+  }
+  if(/\bpoints?\b/.test(s)&&!/lines?\b|circle|squar|rectang|triang|semi|arc\b|corner|vertex|vertices|centre|center|radius|segment/.test(s)){
+   const n=Math.max(((m=>m?(NUMW[m[1]]||+m[1]):0)(s.match(/\b(a|an|one|two|three|four|five|six|\d+)\b(?:\s+[a-z-]+){0,3}?\s+points?/))),co.length,1);for(let i=0;i<n;i++){const p=co[i];mk({k:'point',x:p?p[0]:50,y:p?p[1]:50,lw:3.4,dash:'',pg:!!p,as:strict&&!p?['position']:[]})}continue}
+
+  let made=false;
+  const halfM=s.match(/\b(left|right|top|bottom|upper|lower)\s+(?:half|part)/);
+  if(hasC&&!hasS&&halfM){
+   if(!LR)LR=mk({k:'rect',x:20,y:35,w:60,h:30,rc:{}});
+   const sd=halfM[1],lr=/left|right/.test(sd),pos=/left|bottom|lower/.test(sd)?.25:.75;
+   const cx=lr?LR.x+LR.w*pos:LR.x+LR.w/2,cy=lr?LR.y+LR.h/2:LR.y+LR.h*pos;
+   LC=mk({k:'circle',x:cx,y:cy,r:RAD||(lr?Math.min(LR.w/2,LR.h):Math.min(LR.w,LR.h/2))/2*.93});made=true;
+  }else if(hasC&&(hasS||hasR)&&inRe.test(s)){
+   const ix=s.search(inRe),b=s.slice(0,ix),ci=b.lastIndexOf('circle'),si=Math.max(b.lastIndexOf('square'),b.lastIndexOf('rectang'));
+   const c=C0||[50,50];let r=RAD,sd=nm('sides?|side length');
+   const as1=strict&&!RAD&&!sd&&!nm('wide|width|long')?['size']:[];let rw,rh;if(si>ci){r=r||(sd?sd*Math.SQRT1_2:35);sd=r*Math.SQRT2;rw=rh=sd}else{rw=nm('wide|width|long')||sd||60;rh=nm('high|tall|height')||(hasS&&!hasR?rw:sd||rw*(hasR?.6:1));r=r||Math.min(rw,rh)/2}
+   LC=mk({k:'circle',x:c[0],y:c[1],r,as:as1});LR=mk({k:'rect',x:c[0]-rw/2,y:c[1]-rh/2,w:rw,h:rh,rc:{},as:as1});made=true;
+  }else if(/triangle/.test(s)){
+   let b=nm('base|wide|width|long'),h=nm('high|tall|height'),pts;const tAs=strict&&!(co.length>=3||(b&&h&&C0))?['vertex coordinates']:[];
+   if(co.length>=3)pts=co.slice(0,3);
+   else{b=b||40;h=h||(/equilateral/.test(s)?b*.866:30);const cc=C0&&/cent/.test(s),x=C0?(cc?C0[0]-b/2:C0[0]):50-b/2,y=C0?(cc?C0[1]-h/2:C0[1]):50-h/2;
+    pts=/right[- ]angle|right triangle/.test(s)?[[x,y],[x+b,y],[x,y+h]]:[[x,y],[x+b,y],[x+b/2,y+h]]}
+   mk({k:'path',d:'M'+pts.map(p=>p.join(' ')).join('L')+'Z',as:tAs});made=true;
+  }else if(hasS||hasR){
+   let w=nm('wide|width|long|base'),h=nm('high|tall|height'),sd=nm('sides?|side length');
+   const by=s.match(/(\d+(?:\.\d+)?)\s*(?:mm|cm)?\s*(?:by|x|×)\s*(\d+(?:\.\d+)?)/);if(by){w=+by[1];h=+by[2]}
+   const rAs=strict?[...((w&&h)||sd||co.length>=2||(hasS&&!hasR&&w)?[]:['width and height']),...(C0?[]:['position (coordinates)'])]:[];
+   if(hasS&&!hasR)w=h=sd||w||h||30;
+   else{if(/twice|double/.test(s)){if(w&&!h)h=w/2;else if(h&&!w)w=2*h;else if(!w&&!h){w=60;h=30}}w=w||40;h=h||20}
+   let x=50-w/2,y=50-h/2;
+   if(co.length>=2){x=Math.min(co[0][0],co[1][0]);y=Math.min(co[0][1],co[1][1]);w=Math.abs(co[0][0]-co[1][0]);h=Math.abs(co[0][1]-co[1][1])}
+   else if(C0){const[a,b]=C0;if(/cent(re|er)|middle/.test(s)){x=a-w/2;y=b-h/2}else if(/top[- ]?left|upper left/.test(s)){x=a;y=b-h}else if(/top[- ]?right|upper right/.test(s)){x=a-w;y=b-h}else if(/bottom[- ]?right|lower right/.test(s)){x=a-w;y=b}else{x=a;y=b}}
+   LR=mk({k:'rect',x,y,w,h,rc:{},arch:semi,as:rAs});made=true;
+  }else if(hasC){
+   const nn=(s.match(/\b(two|three|four|five|six)\b/)||[])[1],n=NUMW[nn]||(/circles\b/.test(s)?2:1);
+   if(/concentric/.test(s)){const rs=[...s.matchAll(/\d+(?:\.\d+)?/g)].map(m=>+m[0]/(diam?2:1)),cc=C0||[50,50];(rs.length?rs:[15,30]).forEach(r=>mk({k:'circle',x:cc[0],y:cc[1],r,as:strict?[...(rs.length?[]:['radii']),...(C0?[]:['centre'])]:[]}));made=true}
+   else if(co.length>=2||(n>1&&!(LR&&inRe.test(s)))){const r=RAD||15,cs=co.length>=2?co:Array.from({length:n},(_,i)=>[50+(i-(n-1)/2)*2*r,50]);cs.forEach(p=>mk({k:'circle',x:p[0],y:p[1],r,as:strict?[...(RAD?[]:['radius']),...(co.length>=2?[]:['centres'])]:[]}));made=true}
+   else{
+   let c=C0||(LR&&inRe.test(s)?[LR.x+LR.w/2,LR.y+LR.h/2]:[50,50]),r=RAD||15;
+   if(LR&&!C0&&!RAD&&inRe.test(s)){c=[LR.x+LR.w/2,LR.y+LR.h/2];r=Math.min(LR.w,LR.h)/2*.9}
+   const rel=LR&&inRe.test(s);LC=mk({k:'circle',x:c[0],y:c[1],r,as:strict?[...(RAD||rel?[]:['radius']),...(C0||rel?[]:['centre'])]:[]});made=true}
+  }
+  if(semi&&!made){
+   if(LR&&/top|on|above|upper/.test(s)){LR.arch=true}
+   else{const r=RAD||15,c=C0||[50,40];mk({k:'path',d:`M${c[0]-r} ${c[1]}A${r} ${r} 0 0 0 ${c[0]+r} ${c[1]}Z`,as:strict&&!(RAD&&C0)?['radius and centre']:[]})}
+   made=true;
+  }
+  if(!hasC&&LR&&/\b(rounded|round|curved|curve)\b/.test(s)&&(hasS||hasR||/corner/.test(s))){
+   const ck=/top[- ]?left|upper[- ]?left/.test(s)?'tl':/bottom[- ]?right|lower[- ]?right/.test(s)?'br':/bottom[- ]?left|lower[- ]?left/.test(s)?'bl':'tr';
+   LR.rc[ck]=RAD||Math.min(LR.w,LR.h)*.4;made=true;
+  }
+  let crossed=false;
+  if(LC&&!LC.cr&&/cross|four|quarters?|perpendicular|\bdiameters\b/.test(s)&&(hasC||/lines?|diameters/.test(s))){
+   LC.cr=1;mk({k:'line',x1:LC.x-LC.r,y1:LC.y,x2:LC.x+LC.r,y2:LC.y,lw:.9,dash:''});mk({k:'line',x1:LC.x,y1:LC.y-LC.r,x2:LC.x,y2:LC.y+LC.r,lw:.9,dash:''});crossed=true;
+  }
+  if(crossed||!/\blines?\b|segment|diagonals?/.test(s)||(made&&!/horizontal|vertical|divid|middle/.test(s)))continue;
+  const ln=(x1,y1,x2,y2,o={})=>{const l=mk({k:'line',x1,y1,x2,y2,...o});if(x1==x2)LV=l;else if(y1==y2)LH=l;return l};
+  if(LR&&/diagonal/.test(s)&&!co.length&&!/\d\s*(?:degrees?|deg|°|º)/.test(s)){ln(LR.x,LR.y,LR.x+LR.w,LR.y+LR.h);if(/two|both|diagonals/.test(s))ln(LR.x,LR.y+LR.h,LR.x+LR.w,LR.y);continue}
+  const am=s.match(/(\d+(?:\.\d+)?)\s*(?:degrees?|deg|°|º)/);
+  if(am){
+   const a=+am[1]*Math.PI/180,rt=/right/.test(s);
+   let base=[...out].reverse().find(o=>o.k=='line'&&o.y1==o.y2);
+   const o=C0||(base?[rt?Math.max(base.x1,base.x2):Math.min(base.x1,base.x2),base.y1]:[30,30]),sg=rt?-1:1;
+   if(!base)ln(o[0],o[1],o[0]+sg*50,o[1]);
+   const len=nm('long|length')||50;
+   ln(o[0],o[1],o[0]+sg*len*Math.cos(a),o[1]+len*Math.sin(a));
+   mk({k:'arc',d:`M${o[0]+sg*15} ${o[1]}A15 15 0 0 ${sg>0?1:0} ${o[0]+sg*15*Math.cos(a)} ${o[1]+15*Math.sin(a)}`,lw:.6});
+   out.push({txt:[o[0]+sg*17,o[1]+5,am[1]+'°']});continue;
+  }
+  const hz=/horizontal/.test(s);
+  if((LR||LC)&&/divid|split|middle|cent(re|er)|cuts?/.test(s)&&!co.length&&!made&&!/lines\b/.test(s)||(LR&&/divid|middle/.test(s)&&!co.length)){
+   const t=LR||{x:LC.x-LC.r,y:LC.y-LC.r,w:2*LC.r,h:2*LC.r};
+   if(hz)ln(t.x,t.y+t.h/2,t.x+t.w,t.y+t.h/2);else ln(t.x+t.w/2,t.y,t.x+t.w/2,t.y+t.h);continue;
+  }
+  const pl=/lines\b/.test(s),cnt=o=>{const m=s.match(new RegExp('\\b(a|an|one|two|three|four|five|six|\\d+)\\b(?:\\s+[a-z-]+){0,3}?\\s+'+o));return m?(NUMW[m[1]]||+m[1]):0};
+  if(sty.length>=2){const n=sty.length,L0=nm('long|length');sty.forEach((d,i)=>{if(co.length>=n){const p=co[i];ln(p[0],p[1],p[0]+(L0||40),p[1],{dash:d,as:strict&&!L0?['length']:[]})}else{const y=50+((n-1)/2-i)*15;ln(30,y,70,y,{dash:d,as:strict?['length and position']:[]})}});continue}
+  let dirMiss=false,nh=cnt('horizontal'),nv=cnt('vertical');
+  if(!nh&&/horizontal/.test(s))nh=pl?2:1;if(!nv&&/vertical/.test(s))nv=pl?2:1;
+  if(!nh&&!nv){const m=s.match(/\b(a|an|one|two|three|four|five|six|\d+(?!\s*(?:mm|cm|unit|deg|°|º)))\b/);nh=m?(NUMW[m[1]]||+m[1]):(pl?2:1);dirMiss=true}
+  if(RLI&&RLI.par&&dirMiss){const r=[...out].reverse().find(x=>x.k=='line');if(r){dirMiss=false;if(Math.abs(r.x2-r.x1)<Math.abs(r.y2-r.y1)){nv=nh;nh=0}}}
+  const lm=s.match(/lines?\s*,?\s*(?:of|measuring)\s+(\d+(?:\.\d+)?)/),len=nm('long|length')||(lm?+lm[1]:null),cr=/cross|intersect|perpendicular|through/.test(s);
+  const SPm=s.match(/(?:apart|separated|separation|spaced|spacing|distance|gap)\D{0,12}?(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*(?:mm|cm)?\s*(?:apart|between|separation|gap)/),SP=SPm?+(SPm[1]||SPm[2]):null,lAs=strict?[...(len||co.length>=2*(nh+nv)?[]:['length']),...(C0?[]:['position']),...(dirMiss?['direction']:[])]:[],ba=nv&&nh?lAs:[];
+  if(co.length>=2*(nh+nv)){for(let i=0;i<nh+nv;i++)ln(co[2*i][0],co[2*i][1],co[2*i+1][0],co[2*i+1][1]);continue}
+  if(nv&&nh||(nh&&!nv&&cr&&LV)||(nv&&!nh&&cr&&LH)){
+   let vx=50,vy1=15,vy2=85;
+   if(nv&&nh){for(let i=0;i<nv;i++){vx=50+(i-(nv-1)/2)*20;ln(vx,15,vx,85,{as:ba})}}
+   if(nh&&!nv){vx=LV.x1;vy1=LV.y1;vy2=LV.y2}
+   if(nh){const mid=(vy1+vy2)/2;for(let i=0;i<nh;i++){const y=mid+(i-(nh-1)/2)*20;ln(vx-15,y,vx+15,y,{as:ba})}}
+   else{const hy=LH.y1,mx=(LH.x1+LH.x2)/2;for(let i=0;i<nv;i++){const x=mx+(i-(nv-1)/2)*20;ln(x,hy-15,x,hy+15)}}
+   continue;
+  }
+  const ll=len||40,g=SP||15,spA=strict&&C0&&!SP&&co.length<Math.max(nh,nv)&&Math.max(nh,nv)>1?['spacing']:[];
+  for(let i=0;i<nh;i++){if(co.length>=nh){const p=co[i];ln(p[0],p[1],p[0]+ll,p[1],{as:lAs})}else if(C0){const y=C0[1]+i*g;ln(C0[0],y,C0[0]+ll,y,{as:i?[...lAs,...spA]:lAs})}else{const y=50+(i-(nh-1)/2)*15;ln(50-ll/2,y,50+ll/2,y,{as:lAs})}}
+  for(let i=0;i<nv;i++){if(co.length>=nv){const p=co[i];ln(p[0],p[1],p[0],p[1]+ll,{as:lAs})}else if(C0){const x=C0[0]+i*g;ln(x,C0[1],x,C0[1]+ll,{as:i?[...lAs,...spA]:lAs})}else{const x=50+(i-(nv-1)/2)*15;ln(x,50-ll/2,x,50+ll/2,{as:lAs})}}
+ }
+ chk(sents.length-1);const res=out.map(o=>{
+  if(o.k=='rect'){const r=o.arch?o.w/2:0;o.d=o.arch?`M${o.x} ${o.y}L${o.x} ${o.y+o.h}A${r} ${r} 0 0 0 ${o.x+o.w} ${o.y+o.h}L${o.x+o.w} ${o.y}Z`:R(o.x,o.y,o.w,o.h,o.rc)}
+  else if(o.k=='circle')o.d=C(o.x,o.y,o.r);
+  else if(o.k=='line')o.d=L(o.x1,o.y1,o.x2,o.y2);
+  else if(o.k=='point')o.d=PT(o.x,o.y).d;
+  return o});res.ign=ign;return res;
+}
+
+const EX={point:'There are two points at (20,20) and (70,60).',line:'There is a line 50 mm long, starting at (20,30).',above:'The circle is 10 mm above the rectangle.',below:'The second line is 20 mm below the first one.','left of':'The square is 10 mm to the left of the circle.','right of':'The square is 10 mm to the right of the circle.',horizontal:'There are three horizontal lines.',vertical:'A vertical line goes from (50,15) to (50,85).',parallel:'The two lines are parallel: they never meet.',perpendicular:'The vertical line is perpendicular to the horizontal line.',diagonal:'A diagonal line joins two opposite corners.',radius:'The circle has a radius of 20 mm.',diameter:'The diameter is 40 mm, so the radius is 20 mm.',centre:'The centre of the circle is at (50,50).',coordinates:'The line starts at coordinates (20,30).',thick:'There is a thick line at the top.',dashed:'The second line is dashed.',rectangle:'The rectangle is 40 mm wide and 20 mm high.',square:'There is a square with sides of 50 mm.',circle:'There is a circle inside the square.',semicircle:'A semicircle is on top of the rectangle.',arc:'The arc shows the angle between the two lines.',angle:'The two lines make an angle of 45 degrees.',degrees:'The line is at 45 degrees to the horizontal.',corner:'The bottom left corner is at (10,10).',inside:'The square is inside the circle.',width:'The width of the rectangle is 40 mm.',height:'The height of the rectangle is 20 mm.',length:'The line has a length of 50 mm.',mm:'The line is 50 mm long.',triangle:'There is a triangle with a horizontal base.',concentric:'There are two concentric circles with the same centre.',tangent:'The two circles are tangent: they touch at one point.',vertex:'Each vertex of the triangle has coordinates.',base:'The base of the triangle is 60 mm long.',equal:'Both circles are equal: they have the same radius.',opposite:'The line joins two opposite corners.'};
+const chip=(w,u)=>`<span tabindex="0" class="${u?'u':''}" data-tip="e.g. ${EX[w]||''}">${w}</span>`;
+const hid=$('hid');
+function pts(sh){const P=[];sh.forEach(s=>{if(!s.d)return;const p=document.createElementNS(NS,'path');p.setAttribute('d',s.d);hid.appendChild(p);const l=p.getTotalLength();for(let t=0;t<=l;t+=1)P.push(p.getPointAtLength(t));hid.removeChild(p)});return P}
+const cov=(a,b)=>a.length?a.filter(p=>b.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<1.5)).length/a.length:0;
+let SD=null,MS=[];
+function score(tg,gen){
+ const T=pts(tg),G=pts(gen),r=cov(T,G),p=cov(G,T),geo=r&&p?2*r*p/(r+p):0;
+ const tt=tg.filter(s=>s.d),gg=gen.filter(s=>s.d),gp=gg.map(g=>pts([g]));let ok=0,bad=0,miss=0;const badG=[];
+ tt.forEach(t=>{const tp=pts([t]);let b=-1,bc=.8;gp.forEach((q,i)=>{const c=cov(tp,q);if(c>=bc){bc=c;b=i}});
+  if(b<0){miss++;return}const g=gg[b];if((t.dash||'')==(g.dash||'')&&((t.lw||.9)>1.5)==((g.lw||.9)>1.5))ok++;else{bad++;badG.push(g)}});
+ const attr=ok+bad?ok/(ok+bad):0,cnt=gg.length?Math.min(tt.length,gg.length)/Math.max(tt.length,gg.length):0;
+ const extra=gp.filter(q=>cov(q,T)<.8).length;SD={geo,attr,cnt,bad,bg:badG,miss,extra,ok,nT:tt.length,nG:gg.length};return geo*(.6+.4*attr)*(.8+.2*cnt)}
+const NM={rect:'rectangle',circle:'circle',line:'line',path:'shape',point:'point'},f1=n=>+(+n).toFixed(1);
+function desc(o){const lt=o.dash=='dash'?'dashed':o.dash=='dashdot'?'dash-dot':'continuous',th=o.lw>1.5?', thick':'';
+ if(o.k=='rect')return`rectangle ${f1(o.w)} × ${f1(o.h)} mm, bottom-left corner (${f1(o.x)},${f1(o.y)})`+(o.arch?' + semicircle':'')+th+', '+lt;
+ if(o.k=='circle')return`circle, centre (${f1(o.x)},${f1(o.y)}), radius ${f1(o.r)} mm`+th+', '+lt;
+ if(o.k=='line')return`line from (${f1(o.x1)},${f1(o.y1)}) to (${f1(o.x2)},${f1(o.y2)}), ${lt}`+th;
+ if(o.k=='point')return`point at (${f1(o.x)},${f1(o.y)})`;
+ return NM[o.k]||'shape'}
+let WHY={m:'',l:''},POPK=null;const IC2={red:'\u2716\uFE0E',yel:'\u26A0\uFE0E',ok:'\u2714\uFE0E'},P2=x=>Math.round(x*100)+'%';
+const wrow=(c,t,d,fix)=>`<li class="${c}"><b class="ic">${IC2[c]}</b> <b>${t}</b>${d?`<br><span style="color:var(--mut)">${d}</span>`:''}${fix?`<br><b>To improve:</b> ${fix}`:''}</li>`;
+function whyMatch(all){const s=SD;if(!s)return '';const R=[];
+ if(MS.length)R.push(wrow('red',`${MS.length} element(s) with missing data`,'They are drawn in grey and do not count.','Add the missing data: see the red messages in the Reading check.'));
+ R.push(wrow(s.geo>=.97?'ok':'yel',`Shape overlap: ${P2(s.geo)}`,'How much of your drawing lies on the original, and the other way round (tolerance 1.5 mm).',s.geo>=.97?'':(s.miss?`${s.miss} element(s) of the original are not in your drawing yet. `:'')+(s.extra?`${s.extra} element(s) of yours do not match the original. `:'')+'Check the positions, sizes and directions.'));
+ R.push(wrow(s.bad?'yel':'ok',`Line type and thickness: ${s.ok+s.bad?P2(s.attr):'-'}`,'Continuous, dashed or dash-dot, and thin or thick, in every element that matches.',s.bad?`${s.bad} element(s) have a different line type or thickness. Look at the original again.`:''));
+ R.push(wrow(s.nG==s.nT?'ok':'yel',`Number of elements: yours ${s.nG}, original ${s.nT}`,'Elements in your drawing compared with the original.',s.nG==s.nT?'':'Count the elements again.'));
+ const ok=!MS.length&&s.geo>=.97&&!s.bad&&s.nG==s.nT;
+ return (ok?'<p style="margin:0 0 8px"><b>✔︎ Everything matches the original.</b></p>':'')+`<ul>${R.join('')}</ul><p class="sub" style="font-size:12px;margin-top:8px">The final percentage combines the three checks: the overlap is adjusted by the line type and by the number of elements.</p>`}
+function whyLang(lc){const R=lc.items.map(it=>wrow('yel',`<i>“${qs(it.s)}”</i>`,'',it.f.join('<br>')));
+ return (lc.n?(R.length?'':'<p style="margin:0 0 8px"><b>✔︎ All sentences passed the 6 checks.</b></p>'):'<p>Write your description first.</p>')+`<ul>${R.join('')}</ul><p class="sub" style="font-size:12px;margin-top:8px">Each sentence is checked on 6 points: capital letter, full stop, verb, English words, singular/plural and sentence structure. The score is the percentage of checks passed.</p>`}
+function openWhy(k){POPK=k;const p=$('pop');p.innerHTML=`<h3><span>${k=='m'?'Match with the original':'English accuracy'}: what to improve</span><button class="why" id="wx">✕ Close</button></h3>`+WHY[k];p.hidden=false;{const c=p.parentElement.getBoundingClientRect(),t=$('sc').getBoundingClientRect().top;p.style.bottom=Math.round(c.bottom-t+6)+'px';p.style.maxHeight=Math.max(160,Math.round(t-c.top-46))+'px'}$('wm').setAttribute('aria-expanded',k=='m');$('wl').setAttribute('aria-expanded',k=='l');$('wx').onclick=closeWhy}
+function closeWhy(){POPK=null;$('pop').hidden=true;$('wm').setAttribute('aria-expanded',false);$('wl').setAttribute('aria-expanded',false)}
+function explain(all,ign){const R=[],Y=[],O=[],full=!$('pc').hidden,d=D[cur];
+ const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])),q=s=>{s=(s||'').trim().replace(/[.!?]+$/,'');s=s?s[0].toUpperCase()+s.slice(1):'';return esc(s.length>56?s.slice(0,53)+'…':s)},
+  IC={red:'\u2716\uFE0E',yel:'\u26A0\uFE0E',ok:'\u2714\uFE0E'},mk2=(c,m)=>[c,`<b class="ic">${IC[c]}</b> ${m}`];
+ all.filter(o=>o.d&&o.k!='arc').forEach(o=>{if(o.as&&o.as.length)R.push(mk2('red',`${o.src?'<i>“'+q(o.src)+'”</i> — ':''}missing <b>${o.as.join(' and ')}</b> for this ${NM[o.k]||'shape'}: it cannot be drawn without it (shown in grey).`));else if(full)O.push(mk2('ok',desc(o)))});
+ (ign||[]).filter(x=>/\d/.test(x)).forEach(x=>Y.push(mk2('yel',`<i>“${q(x)}”</i> — no drawing data was used. Put the measures in the same sentence as the shape.`)));
+ const good=all.filter(o=>o.d&&!(o.as&&o.as.length)).length,nT=d.s.filter(s=>s.d).length;
+ if(good){if(SD&&SD.bad){const u=[...new Set((SD.bg||[]).map(g=>q(g.src)).filter(Boolean))];Y.push(mk2('yel',`${u.length?'<i>“'+u.join('”, “')+'”</i> — ':''}line type or thickness does not match the original (${SD.bad} element${SD.bad>1?'s':''}).`))}
+  if(good!=nT&&!R.length)Y.push(mk2('yel',`Your drawing has ${good} element(s); the original has ${nT}. Count again.`))}
+ const L=[...R,...Y,...O];
+ $('un').innerHTML=(L.length?L:[all.some(o=>o.d)?mk2('ok','Everything you wrote was read and used.'):mk2('red','Nothing was understood. Use words like point, line, rectangle, circle, square.')]).map(([c,m])=>`<li class="${c}">${m}</li>`).join('')}
+
+const escH=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])),qs=s=>{s=(s||'').trim().replace(/[.!?]+$/,'');s=s?s[0].toUpperCase()+s.slice(1):'';return escH(s.length>60?s.slice(0,57)+'…':s)};
+function langCheck(txt){const ss=txt.trim().split(/(?<=[.!?])\s+|\n+/).filter(x=>x.trim()),items=[];let bad=0,tot=0;
+ ss.forEach(x=>{const t=x.trim(),l=t.toLowerCase(),f=[];
+  if(!/^[A-Z(]/.test(t))f.push('Start the sentence with a capital letter.');
+  if(!/[.!?]\s*$/.test(t))f.push('End the sentence with a full stop (.).');
+  if(!/\b(is|are|has|have|goes|starts|ends|touches|touch|crosses|cross|divides|passes|begins|meet|meets|intersect|intersects|makes|lies|runs|measures)\b/.test(l))f.push('Add a verb, for example: "There is a point…", "The line starts at…".');
+  if(/\b(el|la|los|las|un|una|con|del|círculo|circulo|línea|linea|cuadrado|rectángulo|rectangulo|dibujo|y el)\b/.test(l))f.push('Use only English words: a Spanish word was found.');
+  if(/\b(two|three|four|five|six|\d+)\s+(?:[a-z-]+\s+)?(line|circle|square|rectangle|point)\b/.test(l)||/\b(lines|circles|squares|rectangles|points)\s+is\b/.test(l)||/\bthere is (two|three|four|five|six)\b/.test(l)||/\bthere are (a|an|one)\b/.test(l))f.push('Check singular and plural: "There is a line" / "There are two lines".');
+  if(/^(line|circle|square|rectangle|point)\b/i.test(t))f.push('Start with "There is a…" or "The…", not with the noun alone.');
+  else if(/\ba (angle|arc|axis)\b/.test(l))f.push('Use "an" before a vowel sound: "an angle".');
+  else if(/(starting|starts|begins|located|centre|center)\s+\(/.test(l))f.push('Use "at" before coordinates: "starting at (20,30)".');
+  tot+=6;bad+=f.length;if(f.length)items.push({s:t,f})});
+ return {score:ss.length?1-bad/tot:0,items,n:ss.length}}
+function feedback(txt,gen,sc,T){
+ const G=[],P=[],V=[],low=txt.toLowerCase().trim();
+ if(/\b(el|la|los|las|un|una|con|del|círculo|circulo|línea|linea|cuadrado|rectángulo|rectangulo|dibujo|y el)\b/.test(low))G.push(['warn','Some words look Spanish. Write everything in English.']);
+ const ss=txt.trim().split(/(?<=[.!?])\s+|\n+/).filter(x=>x.trim());
+ if(ss.length<3&&!T.w)G.push(['tip','Use one sentence for each element: "There is a line." "It is 50 mm long."']);
+ if(ss.some(x=>/^[a-z]/.test(x.trim())))G.push(['tip','Start every sentence with a capital letter.']);
+ if(!/[.!?]\s*$/.test(txt.trim()))G.push(['tip','Finish your last sentence with a full stop (.).']);
+ if(!/\b(is|are|has|have|goes|starts|ends|touches|touch|crosses|cross|divides|passes|begins|meet|meets|intersect|intersects)\b/.test(low))G.push(['tip','Use verbs: "There is…", "It has…", "The line starts at…", "The circle touches…".']);
+ if(/\b(two|three|four|five|six|\d+)\s+(?:[a-z-]+\s+)?(line|circle|square|rectangle)\b/.test(low))G.push(['tip','After "two / three…" use the plural: lines, circles, squares.']);
+ if(/(^|[.!?]\s*)(line|circle|square|rectangle)\b/i.test(txt.trim()))G.push(['tip','Remember the article: "A circle…" or "The circle…".']);
+ if(/\ba (angle|arc|axis)\b/.test(low))G.push(['tip','Use "an" before a vowel sound: an angle, an arc.']);
+ if(/\b(lines|circles|squares|rectangles)\s+is\b/.test(low))G.push(['tip','Plural nouns need "are": "The lines are parallel."']);
+ if(/\bthere is (two|three|four|five|six|\d+)\b/.test(low)||/\bthere are (a|an|one)\b/.test(low))G.push(['tip','Use "There is" for one element and "There are" for several: "There are two lines."']);
+ if(/(starting|starts|begins|located|centre|center)\s+\(/.test(low))G.push(['tip','Use "at" before coordinates: "starting at (20,30)".']);
+ if(!G.length)G.push(['ok','Your English looks clear. Well done!']);
+ T.k.forEach(([re,m])=>{if(!new RegExp(re).test(low))P.push(['tip',m])});
+ if(T.num&&!/\d/.test(low))P.push(['warn','This drawing needs measurements (mm) or coordinates like (20,30).']);
+ if(/\b(some|many|a few|about|near|next to|around)\b/.test(low))P.push(['tip','Avoid vague words (about, near, a few). Give numbers and positions.']);
+  const nT=T.s.filter(s=>s.d).length,nG=gen.filter(s=>s.d).length;
+ if(!nG){if(!MS.length)P.unshift(['warn','No shape was understood. Use words like line, rectangle, circle, square.'])}
+ else{
+  if(sc<.85)P.push(['tip','Compare both panels: check sizes, positions and directions.']);
+  if(sc>=.95&&!(SD&&SD.bad))P.unshift(['ok','Excellent! Both drawings match.']);
+ }
+ const vt=[[/\bround\b/,'"round" → use "circle" (noun) or "circular" (adjective).'],[/\bbig\b/,'"big" → use "long" (lines), "wide / high" (rectangles) or "large".'],[/\bstraight line\b/,'"straight line" → say "horizontal line" or "vertical line".'],[/\bdot\b/,'"dot" → use "point" or "coordinates (x, y)".'],[/\b(up|down)\b/,'"up / down" → use "above / below" or "top / bottom".'],[/\bfat\b/,'"fat" → use "thick".'],[/\bsize\b/,'"size" → be specific: length, width, height, radius or diameter.'],[/\bmiddle point\b/,'"middle point" → "centre".'],[/\bangle\b/,'Give the angle in degrees: "an angle of 45 degrees".'],[/\bthing|stuff\b/,'Avoid "thing": name the shape (line, circle, rectangle…).'],[/\bpicture\b/,'In technical English say "drawing" or "diagram", not "picture".'],[/\bsame size\b/,'"same size" → "equal" or "the same radius / length".'],[/\bcorner point\b/,'"corner point" → "vertex" (plural: vertices).']];
+ vt.forEach(([re,m])=>{if(re.test(low)&&!(m.startsWith('Give')&&/degree|°|º/.test(low)))V.push(['tip',m])});
+ const used=VOC.filter(([w,r])=>new RegExp(r||w).test(low));
+ if(used.length<3)V.push(['tip','Try to use more technical words from the list below.']);
+ else if(!V.length)V.push(['ok',`Good technical vocabulary (${used.length} words).`]);
+ const f=(id,a)=>$(id).innerHTML=a.map(([c,m])=>`<li class="${c}">${m}</li>`).join('');
+ f('fg',G);f('fp',P);f('fv',V);
+ $('vc').innerHTML=VOC.map(([w,r])=>chip(w,used.some(u=>u[0]==w))).join('');
+}
+
+const lab=d=>d.w?'Warm-up '+d.n:d.n=='Example'?'Example':'Drawing '+d.n;let cur=0;
+function pick(i){
+ cur=i;const d=D[i];
+ [...$('sel').children].forEach((b,j)=>b.classList.toggle('on',j==i));
+ render($('L'),d.s);render($('R'),[]);$('hp').hidden=!d.w;document.querySelector('.work').classList.toggle('h3',!!d.w);$('hb').innerHTML='';
+ $('dn').textContent='— '+lab(d);
+ $('sc').firstChild.textContent='Press “Draw from my text” to see your drawing.';$('br').style.width='0';$('un').innerHTML='<li>Press “Draw from my text”.</li>';$('lt').textContent='';$('lb').style.width='0';$('wm').hidden=$('wl').hidden=true;closeWhy();
+ ['fg','fp','fv'].forEach(x=>$(x).innerHTML='<li>Write your description and press Draw.</li>');
+ $('vc').innerHTML=VOC.map(([w])=>chip(w,0)).join('');
+}
+function go(){
+ const t=$('txt').value;
+ if(!t.trim()){$('fg').innerHTML='<li class="warn">Write your description first.</li>';return}
+ const d=D[cur],all=parse(t,!d.q),gen=all.filter(o=>!(o.as&&o.as.length));render($('R'),all);
+ MS=all.filter(o=>o.as&&o.as.length);let sc=score(d.s,gen);if(d.q){const lw=t.toLowerCase(),ok=d.k.filter(([r])=>new RegExp(r,'i').test(lw)).length;sc=Math.min(sc,ok/d.k.length)}
+ explain(all,all.ign);{const lc=langCheck(t),l=lc.score;$('lt').textContent='English accuracy: '+Math.round(l*100)+'%';$('lb').style.width=Math.round(l*100)+'%';WHY.m=whyMatch(all);WHY.l=whyLang(lc);$('wm').hidden=$('wl').hidden=false;if(POPK)openWhy(POPK)}
+ $('sc').firstChild.textContent=`Match with the original: ${Math.round(sc*100)}%`;$('br').style.width=Math.round(sc*100)+'%';
+ feedback(t,gen,sc,d);
+}
+D.forEach((d,i)=>{const b=document.createElement('button');b.className='chip'+(d.w?' wu':'');b.textContent=d.n;b.onclick=()=>pick(i);$('sel').appendChild(b)});
+$('go').onclick=go;
+$('wm').onclick=()=>POPK=='m'?closeWhy():openWhy('m');$('wl').onclick=()=>POPK=='l'?closeWhy():openWhy('l');
+document.addEventListener('click',e=>{if(POPK&&!e.target.closest('#pop,.why'))closeWhy()});document.addEventListener('keydown',e=>{if(e.key=='Escape'&&POPK)closeWhy()});
+['mouseover','focusin'].forEach(ev=>document.addEventListener(ev,e=>{const s=e.target.closest&&e.target.closest('.voc span');if(!s)return;const r=s.getBoundingClientRect(),cx=r.left+r.width/2,W=innerWidth,m=118;s.style.setProperty('--sh',(cx<m?m-cx:cx>W-m?W-m-cx:0)+'px')}));
+$('hw').onclick=()=>{$('hb').innerHTML=D[cur].wb.map(([w,g])=>`<div><b>${w}</b> — ${g}</div>`).join('')};
+$('hf').onclick=()=>{$('hb').innerHTML=`<div style="font-family:monospace;padding:8px 10px;background:var(--bg);border-left:3px solid var(--acc);border-radius:4px">${D[cur].fr}</div><div style="margin-top:6px">Fill in the blanks, then press Draw.</div>`};
+$('clr').onclick=()=>{$('txt').value='';pick(cur)};
+$('txt').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key=='Enter')go()});
+const tp=$('tp'),PIN='0305',IS='padding:7px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit';
+tp.parentNode.insertBefore(tp,tp.parentNode.children[1]);
+tp.innerHTML=`<h2>👩‍🏫 Teacher view</h2><div id="pg"><p class="sub" style="font-size:13px">Enter the teacher PIN to continue.</p><div class="row"><input id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="PIN" style="width:90px;${IS}"><button class="btn" id="pok">Unlock</button><span id="pe" style="color:var(--bad);font-size:13px"></span></div></div><div id="pc" hidden><div class="row"><label for="ps" style="font-size:13px">Which drawing do you want to describe?</label><select id="ps" style="${IS}">${D.map((d,i)=>`<option value="${i}">${lab(d)}</option>`).join('')}</select></div><p id="pm" style="margin:10px 0;padding:8px 10px;background:var(--bg);border-left:3px solid var(--acc);border-radius:4px"></p><div class="row"><button class="btn sec" id="pt">Show this drawing and try the model text</button><button class="btn sec" id="pl">Lock</button></div></div>`;
+const showM=()=>{$('pm').textContent=MODEL[$('ps').value]},lock=()=>{$('pg').hidden=false;$('pc').hidden=true;$('pin').value='';$('pe').textContent=''},TV='👩‍🏫 Teacher view';
+$('ps').onchange=showM;
+$('pok').onclick=()=>{if($('pin').value===PIN){$('pg').hidden=true;$('pc').hidden=false;$('pin').value='';$('pe').textContent='';$('ps').value=cur;showM()}else{$('pe').textContent='Wrong PIN';$('pin').value=''}};
+$('pin').onkeydown=e=>{if(e.key==='Enter')$('pok').click()};
+$('pt').onclick=()=>{const i=+$('ps').value;pick(i);$('txt').value=MODEL[i];go()};
+$('pl').onclick=()=>{lock();tp.hidden=true;$('tv').textContent=TV};
+$('tv').onclick=()=>{tp.hidden=!tp.hidden;lock();$('tv').textContent=tp.hidden?TV:'✖ Close teacher view';if(!tp.hidden){tp.scrollIntoView({behavior:'smooth',block:'start'});$('pin').focus()}};
+
+
+
+pick(0);
+</script></body></html>
